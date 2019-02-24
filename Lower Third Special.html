@@ -1,0 +1,92 @@
+<html>
+	<head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+				<script type="text/javascript" src="./scripts/jquery-1.7.min.js"></script>
+				<script type="text/javascript" src="./scripts/sockjs.min.js"></script>
+				<script type="text/javascript" src="./scripts/scripts.js"></script>
+		<style>
+			body {
+				margin:0px;
+				overflow: hidden;
+			}
+			.invisible {
+				fill-opacity:1;
+			}
+			.visible {
+				fill-opacity:1;
+			}
+		</style>
+    </head>
+    <body id="theBody">
+		<div id="thing5" style="position: -200px;">
+			<svg height="1080" width="0" id="third">
+				<defs>
+					<linearGradient id="three_opacity_stops" x1="1" x2="1" y1="0" y2="1">
+						<stop offset="0%" style="stop-color: #000; stop-opacity: 0.5"/>
+						<stop offset="60%" style="stop-color: #000; stop-opacity: 0.25"/>
+						<stop offset="100%" style="stop-color: #000; stop-opacity: 0"/>
+					</linearGradient>
+				</defs>
+				<rect class="shape invisible" id="shadow0" x="0" y="979" rx="8" ry="8" width="825" height="20" style="fill: url(#three_opacity_stops);"/>
+				<rect class="shape invisible" id="shadow1" x="811" y="979" rx="8" ry="8" width="80" height="20"  transform="rotate(-48,820,976)" style="fill: url(#three_opacity_stops);"/>
+				<rect class="shape invisible" id="shadow2" x="860" y="926" rx="15" ry="12" width="130" height="20" style="fill: url(#three_opacity_stops);"/>
+				<polygon id="poly0" class="shape invisible" points="0,863 925,863 991,936 0,936" style="fill:#67caff;" />
+				<polygon id="poly1" class="shape invisible" points="0,936 872,936 825,989 0,989" style="fill:white;" />
+				<text id="text0" class="shape invisible" x="40" y="920" fill="white" font-size="60px" font-family="Trebuchet MS" font-weight="bold">text0</text>
+				<text id="text1" class="shape invisible" x="40" y="975" fill="#67caff" font-size="42px" font-family="Trebuchet MS">text1</text>
+			</svg>
+		</div>
+	</body>
+	<script type="text/javascript">
+
+		function play(data) {
+			/*document.getElementById("text0").innerHTML = data;
+			var items = document.getElementsByClassName("shape");
+			for (var i=0; i < items.length; i++) {
+				items[i].classList.add("visible");
+			}*/
+			$("#third").animate({width:1000},1000);
+		}
+			
+		function next() {
+		}
+		
+		function update(templateData) {
+			if(!templateData){
+				//nothing there
+				document.getElementById("text0").innerHTML = "";
+				document.getElementById("text1").innerHTML = "";
+			}
+			else
+			{
+				var templateData = JSON.parse(templateData);
+				if(templateData.f0){document.getElementById("text0").innerHTML = templateData.f0;}
+				if(templateData.f1){document.getElementById("text1").innerHTML = templateData.f1;}
+				//if(templateData.c0){
+					$("poly0").css = ("fill","white");
+					$("text1").css = ("color","white");
+				//}
+				//if(!templateData.c1){
+					document.getElementById("poly1").fill = templateData.c1;
+					document.getElementById("text0").fill = templateData.c1;
+				//}
+			}
+		}
+		
+		function stop() {
+			/*var items = document.getElementsByClassName("shape");
+			for (var i=0; i < items.length; i++) {
+				items[i].classList.remove("visible");
+			}*/
+			$("#third").animate({width:0},1000);
+		}
+		
+		function chbg(){
+			//Makes for easier testing
+			document.getElementById("theBody").style = "background-color:orange";
+		}
+		
+		//chbg();
+		//play();
+	</script>
+</html>

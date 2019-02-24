@@ -1,0 +1,176 @@
+<html>
+	<head>
+		<style>
+			body {
+				margin:0px;
+				overflow: hidden;
+			}
+			.invisible {
+				fill-opacity:0;
+			}
+			.visible {
+				fill-opacity:1;
+			}
+		</style>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="./sctips/jquery-1.7.min.js"></script>
+		<script type="text/javascript" src="./scripts/sockjs.min.js"></script>
+		<script type="text/javascript" src="./scripts/scripts.js"></script>
+    </head>
+    <body id="theBody" class="someClass">
+        <svg height="1080" width="1920" id="counter" style="opacity:0;">
+		
+		<defs>
+				<linearGradient id="three_opacity_stops" x1="1" x2="1" y1="0" y2="1">
+					<stop offset="0%" style="stop-color: #000; stop-opacity: 0.5"/>
+					<stop offset="60%" style="stop-color: #000; stop-opacity: 0.25"/>
+					<stop offset="100%" style="stop-color: #000; stop-opacity: 0"/>
+				</linearGradient>
+			</defs>
+			<rect class="shape" id="shadow0" x="1443" y="982" rx="20" ry="20" width="478" height="20" style="fill: url(#three_opacity_stops);"/>
+			<rect class="shape" id="shadow1" x="1597" y="852" rx="15" ry="10" width="110" height="20"  transform="rotate(57,1593,860)" style="fill: url(#three_opacity_stops);"/>
+			<polygon id="poly0" class="shape" points="1593,863 1920,863 1920,936 1640,936" style="fill:white;" />
+			<polygon id="poly1" class="shape" points="1490,936 1920,936 1920,989 1443,989" style="fill:#67caff;" />
+			<text id="text0" class="shape" x="1700" y="920" fill="#67caff" font-size="60px" font-family="Trebuchet MS"></text>
+			<text id="text1" class="shape" x="1500" y="976" fill="white" font-size="40px" font-family="Trebuchet MS"></text>
+			<text id="textDebug" x="10" y="800" fill="orange" font-size="20px" font-family="Trebuchet MS"></text>
+        </svg>
+	</body>
+	<script type="text/javascript">
+		var runningTotal = 0; // so we can know if a new total is higher, so new donation
+		var counter = 0; // conter for GET request, prevent cache data
+		var manualData = true; // help with set data from caspar, stop auto update
+		var displayLink = 0;
+		
+		function play() {
+			$("#counter").animate({opacity:1},500);
+			// Unhide
+			/*var items = document.getElementsByClassName("shape");
+			for (var i=0; i < items.length; i++) {
+				items[i].classList.add("visible");
+			}*/
+		}
+			
+		function next() {
+			// Just a placeholder, can be used with caspar key press F5
+		}
+		
+		function update() {
+			// Function from caspar. initiates request to JG
+			counter++;
+			//if(!templateData){
+				// no manual data, get data from
+				getFromJustGiving();
+				manualData = false;
+			/*}
+			else
+			{
+				// Manual data rx, update values
+				manualData = true;
+				var templateData = JSON.parse(templateData);
+				if(!templateData.f0){document.getElementById("text0").innerHTML = "";}
+				else{document.getElementById("text0").innerHTML = templateData.f0;}
+				if(!templateData.f1){document.getElementById("text1").innerHTML = "";}
+				else{document.getElementById("text1").innerHTML = templateData.f1;}
+			}*/
+		}
+		
+		function updateValues(jgData) {
+			// this is run on rx of GET request
+			//document.getElementById("textDebug").innerHTML = jgData;
+			var totalRaised = findData(jgData, "raised");
+			var totalPercent = findData(jgData, "percent");
+			var targetAmount = findData(jgData, "target");
+			//var target = findData(jgData, "target");
+			
+			//find out if a new donation is come in
+			if(runningTotal == 0) {
+				// update if update has not been run before, prevent false positive
+				runningTotal = totalRaised;
+			}
+			if(runningTotal != totalRaised) {
+				document.getElementById("text1").innerHTML = "New Donation!";
+			}
+			else{
+					document.getElementById("text1").innerHTML = totalPercent + "% of £" + targetAmount + " target";
+					//displayLink=1;
+					
+					document.getElementById("text1").innerHTML = "Donate: tiny.cc/biglive";
+			}
+			runningTotal = totalRaised;
+			document.getElementById("text0").innerHTML = "£" + totalRaised;
+			
+		}
+		
+		function stop() {
+			$("#counter").animate({opacity:0},500);
+			/*var items = document.getElementsByClassName("shape");
+			for (var i=0; i < items.length; i++) {
+				items[i].classList.remove("visible");
+			}*/
+		}
+
+				
+		function getFromJustGiving() {
+			// This function makes a GET request to justGiving to find information
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					updateValues(this.responseText);
+				}
+				if (this.readyState == 4 && this.status != 200) {
+					stop();
+					return;
+				}
+			};
+			xhttp.open("GET", "http://api.justgiving.com/v1/fundraising/pages/biglive", true);
+			//xhttp.open("GET", "http://www.csrfm.com/jg.html?t="+counter, true);
+			xhttp.setRequestHeader("x-api-key", "7a836151");
+			xhttp.setRequestHeader("content-type", "application/json");
+			xhttp.send();
+		}
+		
+		function findData(rawData, req) {
+			// takes data string and data out
+			// req can be raised|percent|target|totalOnline|totalOffline|totalSMS
+			// will default to raised
+			if(! rawData) {console.log("findData no input data set");}
+			//document.getElementById("text0").innerHTML = rawData;
+			var data = JSON.parse(rawData);
+			if(!req){var req = "raised"}
+			if(req == "raised") { return data.grandTotalRaisedExcludingGiftAid; }
+			if(req == "percent") { return data.totalRaisedPercentageOfFundraisingTarget; }
+			if(req == "target") { return data.fundraisingTarget; }
+			if(req == "totalOnline") { return data.totalRaisedOnline; }
+			if(req == "totalOffline") { return data.totalRaisedOffline; }
+			if(req == "totalSMS") { return data.totalRaisedSms; }
+		}
+		
+		//function sleep(milliseconds) {
+		//	var start = new Date().getTime();
+		//	for (var i = 0; i < 1e7; i++) {
+		//		if ((new Date().getTime() - start) > milliseconds){
+		//			break;
+		//		}
+		//	}
+		//}
+		
+		//for (;;) {
+		//	if(manualData == false)
+		//	{
+				//sleep(5000);
+				//update();
+		//	}
+		//}
+		
+		window.setInterval(update, 5000);
+		
+		
+		function chbg(){
+			document.getElementById("theBody").style = "background-color:orange";
+		}
+		
+		//chbg();
+		//play();
+	</script>
+</html>
