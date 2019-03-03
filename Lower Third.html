@@ -2,12 +2,17 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="./scripts/jquery-1.7.min.js"></script>
-		<script type="text/javascript" src="./scripts/sockjs.min.js"></script>
 		<style>
-		body {
-			margin:0px;
-			overflow: hidden;
-		}
+			body {
+				margin:0px;
+				overflow: hidden;
+			}
+			#poly0,#text1 {
+				fill:black;
+			}
+			#poly1,#text0 {
+				fill: white;
+			}
 		</style>
 	</head>
 	<body>
@@ -22,10 +27,10 @@
 			<rect class="shape" id="shadow0" x="0" y="979" rx="8" ry="8" width="825" height="20" style="fill: url(#three_opacity_stops);" />
 			<rect class="shape" id="shadow1" x="811" y="979" rx="8" ry="8" width="80" height="20" transform="rotate(-48,820,976)" style="fill: url(#three_opacity_stops);" />
 			<rect class="shape" id="shadow2" x="860" y="926" rx="15" ry="12" width="130" height="20" style="fill: url(#three_opacity_stops);" />
-			<polygon id="poly0" class="shape" points="0,863 925,863 991,936 0,936" style="fill:#67caff;" />
-			<polygon id="poly1" class="shape" points="0,936 872,936 825,989 0,989" style="fill:white;" />
-			<text id="text0" class="shape" x="40" y="920" fill="white" font-size="60px" font-family="Trebuchet MS" font-weight="bold">text0</text>
-			<text id="text1" class="shape" x="40" y="975" fill="#67caff" font-size="42px" font-family="Trebuchet MS">text1</text>
+			<polygon id="poly0" class="shape" points="0,863 925,863 991,936 0,936" />
+			<polygon id="poly1" class="shape" points="0,936 872,936 825,989 0,989" />
+			<text id="text0" class="shape" x="40" y="920" font-size="60px" font-family="Trebuchet MS" font-weight="bold">text0</text>
+			<text id="text1" class="shape" x="40" y="975" font-size="42px" font-family="Trebuchet MS">text1</text>
 		</svg>
 	</body>
 	<script type="text/javascript">
