@@ -1,0 +1,135 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="./scripts/jquery-1.7.min.js"></script>
+		<style>
+			body {
+				margin:0px;
+				overflow: hidden;
+			}
+			.invisible {
+				fill-opacity:1;
+			}
+			.visible {
+				fill-opacity:1;
+			}
+			.info {
+				font-family:"Trebuchet MS";
+				font-weight:bold;
+				font-size:37;
+				vertical-align: center;
+				margin:20px;
+				height:160px;
+			}
+			.infoWrap {
+				overflow: hidden;
+				height: 0px;
+			}
+			.titles {
+				text-align: center;
+				font-family:"Trebuchet MS";
+				font-size:40;
+				margin-bottom: 10px;
+			}
+			#name {
+				font-weight:bold;
+				font-size:43;
+			}
+			img {
+				border-radius: 25px;
+				margin: 15px;
+			}
+		</style>
+	</head>
+	<body id="theBody">
+		<div id="thing5" style="position: 0px;" height="0px;" style="overflow:hidden;">
+			<svg width="1920" height="1080" id="third" style="overflow:hidden;">
+				<defs>
+					<linearGradient id="three_opacity_stops" x1="1" x2="1" y1="0" y2="1">
+						<stop offset="0%" style="stop-color: #000; stop-opacity: 0.5" />
+						<stop offset="60%" style="stop-color: #000; stop-opacity: 0.25" />
+						<stop offset="100%" style="stop-color: #000; stop-opacity: 0" />
+					</linearGradient>
+				</defs>
+				<div id="container" style="background-color:#D51C29;position:absolute;top:0px;left:1280px;width:640px;height:0px;border-radius:0px;overflow:hidden">
+					<center>
+						<img id="picture" style="margin-top:40px" width="300" height="300" src="" />
+					</center>
+					<div class="titles" id="name">
+						Name (f1) - image url is f0
+					</div>
+					<div class="titles" id="position">
+						Position (f2)
+					</div>
+					<div id="infoWrap1" class="infoWrap">
+						<div class="info" id="info1" style="color:white">
+							Info 1 (f3)
+						</div>
+					</div>
+					<div id="infoWrap2" class="infoWrap">
+						<div class="info" id="info2">
+							Info 2 (f4)
+						</div>
+					</div>
+					<div id="infoWrap3" class="infoWrap">
+						<div class="info" id="info3" style="color:white">
+							Info 3 (f5) Background colour = f6
+						</div>
+					</div>
+				</div>
+			</svg>
+		</div>
+	</body>
+	<script type="text/javascript">
+		let infoNo = 1;
+		function play(data) {
+			$("#container").animate({height:1080},1000);
+		}
+
+		function next() {
+			$("#infoWrap"+infoNo).animate({height:165},500);
+			infoNo++
+		}
+
+		function update(templateData) {
+			if(!templateData){
+				//nothing there
+			}
+			else
+			{
+				var templateData = JSON.parse(templateData);
+				if(templateData.f0){
+					$("#picture").attr("src",templateData.f0);
+				}
+				if(templateData.f1){
+					$("#name").html(templateData.f1);
+				}
+
+				if(templateData.f2){
+					$("#position").html(templateData.f2);
+				}
+				if(templateData.f3){
+					$("#info1").html(templateData.f3);
+				}
+				if(templateData.f4){
+					$("#info2").html(templateData.f4);
+				}
+				if(templateData.f5){
+					$("#info3").html(templateData.f5);
+				}
+				if(templateData.f6){
+					$("#container").css("background-color",templateData.f6)
+				}
+			}
+		}
+
+		function stop() {
+			$("#container").animate({height:0},1000);
+		}
+
+		function chbg(){
+			//Makes for easier testing
+			$("body").css("background-color","orange")
+		}
+	</script>
+</html>
